@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
 import environ
 
-ROOT_DIR = environ.Path(__file__) - 2
-APPS_DIR = ROOT_DIR.path('project')
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+APPS_DIR = os.path.join(PROJECT_DIR, 'apps')
 
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
@@ -14,7 +15,7 @@ if READ_DOT_ENV_FILE:
     # Operating System Environment variables have precedence over variables defined in the .env file,
     # that is to say variables from the .env files will only be used if not defined
     # as environment variables.
-    env_file = str(ROOT_DIR.path('.env'))
+    env_file = os.path.join(PROJECT_DIR, '.env')
     print('Loading : {}'.format(env_file))
     env.read_env(env_file)
     print('The .env file has been loaded. See base.py for more information')
@@ -28,7 +29,6 @@ DJANGO_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -38,7 +38,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
 ]
 LOCAL_APPS = [
-    'project.api.apps.ApiConfig',
+    'apps.api',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -64,7 +64,7 @@ DEBUG = env.bool('DJANGO_DEBUG', False)
 # FIXTURE CONFIGURATION
 # ------------------------------------------------------------------------------
 FIXTURE_DIRS = (
-    str(APPS_DIR.path('fixtures')),
+    os.path.join(PROJECT_DIR, 'fixtures'),
 )
 
 
@@ -106,7 +106,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            str(APPS_DIR.path('templates')),
+            os.path.join(APPS_DIR, 'templates'),
         ],
         'OPTIONS': {
             'debug': DEBUG,
@@ -151,14 +151,13 @@ X_FRAME_OPTIONS = env("X_FRAME_OPTIONS", default="SAMEORIGIN")
 
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
-
-STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static_root')
+STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
+STATIC_URL = STATIC_HOST + '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
-    str(APPS_DIR.path('static')),
+    os.path.join(APPS_DIR, 'static'),
 ]
-
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -167,7 +166,7 @@ STATICFILES_FINDERS = [
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
-MEDIA_ROOT = str(APPS_DIR('media'))
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
@@ -200,7 +199,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-
 {% if cookiecutter.use_celery == 'y' %}
 ########## CELERY
 INSTALLED_APPS += ['project.taskapp.celery.CeleryConfig']
@@ -211,8 +209,6 @@ else:
     CELERY_RESULT_BACKEND = BROKER_URL
 ########## END CELERY
 {% endif %}
-
-
 
 # CACHE CONFIGURATION
 # ------------------------------------------------------------------------------
