@@ -6,7 +6,7 @@ volumes:
 
 services:
   postgres:
-    build: ./postgres
+    build: ./postgres/Dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
@@ -26,7 +26,7 @@ services:
       - "5000:5000"
 
   nginx:
-    build: ./compose/nginx
+    build: ./nginx/Dockerfile
     depends_on:
       - django
     ports:
