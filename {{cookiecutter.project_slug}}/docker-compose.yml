@@ -6,7 +6,7 @@ volumes:
 
 services:
   postgres:
-    build: ./compose/postgres
+    build: ./postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
@@ -15,7 +15,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./django/Dockerfile
     user: django
     depends_on:
       - postgres
@@ -38,7 +38,7 @@ services:
   celeryworker:
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./django/Dockerfile
     user: django
     env_file: .env
     depends_on:
@@ -49,7 +49,7 @@ services:
   celerybeat:
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./django/Dockerfile
     user: django
     env_file: .env
     depends_on:

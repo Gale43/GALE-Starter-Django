@@ -12,8 +12,8 @@ RUN pip install -r /requirements/production.txt \
 COPY . /app
 RUN chown -R django /app
 
-COPY ./compose/django/gunicorn.sh /gunicorn.sh
-COPY ./compose/django/entrypoint.sh /entrypoint.sh
+COPY ./gunicorn.sh /gunicorn.sh
+COPY ./entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r//' /entrypoint.sh \
     && sed -i 's/\r//' /gunicorn.sh \
     && chmod +x /entrypoint.sh \
