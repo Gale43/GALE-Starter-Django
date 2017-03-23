@@ -14,12 +14,13 @@ services:
 
   django:
     build: ./django
+    volumes:
+      - ./django:/app
     user: django
     depends_on:
       - postgres
       - redis
-    command: /gunicorn.sh
-    env_file: .env
+    env_file: ./django/.env
     ports:
       - "5000:5000"
 
@@ -32,6 +33,7 @@ services:
 
   redis:
     image: redis:latest
+    
 {% if cookiecutter.use_celery == 'y' %}
   celeryworker:
     build: ./django
@@ -40,7 +42,7 @@ services:
     depends_on:
      - postgres
      - redis
-    command: celery -A {{cookiecutter.project_slug}}.taskapp worker -l INFO
+    command: celery -A {{cookiecutter.project_slug}}.tasks worker -l INFO
 
   celerybeat:
     build: ./django
@@ -49,5 +51,5 @@ services:
     depends_on:
       - postgres
       - redis
-    command: celery -A {{cookiecutter.project_slug}}.taskapp beat -l INFO
+    command: celery -A {{cookiecutter.project_slug}}.tasks beat -l INFO
 {% endif %}
