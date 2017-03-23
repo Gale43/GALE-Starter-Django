@@ -9,6 +9,8 @@ from django.views.defaults import (
     permission_denied,
 )
 
+from . import health
+
 urlpatterns = [
     url(r'^400/$', bad_request, name="server_400"),
     url(r'^403/$', permission_denied, name="server_403"),
@@ -17,6 +19,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    url(r'^health$', health.health, name='health'),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('apps.api.urls', namespace='project_api')),
