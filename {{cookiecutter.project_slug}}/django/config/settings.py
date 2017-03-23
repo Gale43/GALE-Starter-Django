@@ -201,7 +201,7 @@ AUTHENTICATION_BACKENDS = [
 
 {% if cookiecutter.use_celery == 'y' %}
 ########## CELERY
-INSTALLED_APPS += ['project.taskapp.celery.CeleryConfig']
+INSTALLED_APPS += ['project.tasks.celery.CeleryConfig']
 BROKER_URL = env('CELERY_BROKER_URL', default='django://')
 if BROKER_URL == 'django://':
     CELERY_RESULT_BACKEND = 'redis://'

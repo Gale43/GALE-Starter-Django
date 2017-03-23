@@ -15,7 +15,7 @@ app = Celery('project')
 
 
 class CeleryConfig(AppConfig):
-    name = 'project.taskapp'
+    name = 'project.tasks'
     verbose_name = 'Celery Config'
 
     def ready(self):
