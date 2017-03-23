@@ -1,0 +1,15 @@
+git_uri: https://github.com/Gale43/<update will your repo>
+app_folder: django/
+versions_s3_bucket: gale-eb-versions
+application_name:  <update with your app name>
+eb_application_name: <update with your ElasticBeanstalk app name>
+eb_configuration_name: default
+
+copy_files:
+    - api
+    - config
+    - Dockerfile
+    - entrypoint.sh
+    - manage.py
+    - requirements
+    - requirements.txt
