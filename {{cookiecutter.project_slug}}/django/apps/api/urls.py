@@ -2,9 +2,9 @@
 from django.conf.urls import url
 
 from . import views
-from health import health
+from . import health
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^health$', health, name='health'),
+    url(r'^health$', health.health, name='health'),
 ]

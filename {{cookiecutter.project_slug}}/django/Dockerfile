@@ -12,14 +12,10 @@ RUN pip install -r /requirements/production.txt \
 COPY . /app
 RUN chown -R django /app
 
-COPY ./gunicorn.sh /gunicorn.sh
 COPY ./entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r//' /entrypoint.sh \
-    && sed -i 's/\r//' /gunicorn.sh \
     && chmod +x /entrypoint.sh \
-    && chown django /entrypoint.sh \
-    && chmod +x /gunicorn.sh \
-    && chown django /gunicorn.sh
+    && chown django /entrypoint.sh
 
 WORKDIR /app
 EXPOSE 5000
