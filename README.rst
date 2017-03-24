@@ -32,7 +32,7 @@ First, get Cookiecutter. Trust me, it's awesome::
 
 Now run it against this repo::
 
-    $ cookiecutter https://github.com/Gale43/cookiecutter-django
+    $ cookiecutter https://github.com/Gale43/GALE-Starter-Django
 
 You'll be prompted for some values. Provide them, then a Django project will be created for you.
 
