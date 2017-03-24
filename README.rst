@@ -29,14 +29,19 @@ Usage
 
 First, get Cookiecutter.
 
-    $ pip install "cookiecutter>=1.4.0"
+```
+    $ pip install "cookiecutter>=1.4.0"
+```
+    
+Then run it against this repo:
 
-Then run it against this repo::
-
+```
     $ cookiecutter https://github.com/Gale43/GALE-Starter-Django
+``` 
 
 You'll be prompted for some values. Provide them, then a Django project will be created for you. CD into the newly created directory and either prepare a virtualenv or run 
 
-    $ docker-compose build
-    $ docker-compose up
-
+```
+    $ docker-compose build
+    $ docker-compose up
+```
