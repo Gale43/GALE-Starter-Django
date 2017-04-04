@@ -34,7 +34,7 @@ services:
   redis:
     image: redis:latest
 
-{% if cookiecutter.use_celery == 'y' %}
+{% if cookiecutter.use_tasks == 'y' %}
   celeryworker:
     build: ./django
     user: django

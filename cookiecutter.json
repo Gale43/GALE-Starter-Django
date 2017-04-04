@@ -7,7 +7,7 @@
     "domain_name": "galepartners.com",
     "version": "0.1.0",
     "timezone": "UTC",
-    "use_celery": "n",
+    "use_tasks": "n",
     "postgresql_version": ["9.6", "9.5", "9.4", "9.3", "9.2"],
     "open_source_license": ["Not open source", "MIT", "BSD", "GPLv3", "Apache Software License 2.0" ]
 }

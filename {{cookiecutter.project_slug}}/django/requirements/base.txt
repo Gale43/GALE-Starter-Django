@@ -29,7 +29,7 @@ pytz==2016.10
 django-redis==4.7.0
 redis>=2.10.5
 
-{% if cookiecutter.use_celery == "y" %}
+{% if cookiecutter.use_tasks == "y" %}
 celery==4.0.2
 {% endif %}
 

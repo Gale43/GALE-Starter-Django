@@ -199,7 +199,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-{% if cookiecutter.use_celery == 'y' %}
+{% if cookiecutter.use_tasks == 'y' %}
 ########## CELERY
 INSTALLED_APPS += ['project.tasks.celery.CeleryConfig']
 BROKER_URL = env('CELERY_BROKER_URL', default='django://')
