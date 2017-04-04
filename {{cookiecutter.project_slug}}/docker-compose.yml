@@ -42,14 +42,5 @@ services:
     depends_on:
      - postgres
      - redis
-    command: celery -A {{cookiecutter.project_slug}}.tasks worker -l INFO
-
-  celerybeat:
-    build: ./django
-    user: django
-    env_file: .env
-    depends_on:
-      - postgres
-      - redis
-    command: celery -A {{cookiecutter.project_slug}}.tasks beat -l INFO
+    command: celery -A {{cookiecutter.project_slug}}.apps.tasks worker -l INFO
 {% endif %}
