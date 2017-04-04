@@ -6,7 +6,7 @@ eb_application_name: <update with your ElasticBeanstalk app name>
 eb_configuration_name: default
 
 copy_files:
-    - api
+    - apps
     - config
     - Dockerfile
     - entrypoint.sh
