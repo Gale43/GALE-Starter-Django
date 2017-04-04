@@ -1,6 +1,6 @@
 {% if cookiecutter.use_tasks == 'y' %}
 # -*- coding: utf-8 -*-
-
+import logging
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
