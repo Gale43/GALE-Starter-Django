@@ -13,6 +13,7 @@ COPY . /app
 RUN chown -R django /app
 
 COPY ./entrypoint.sh /entrypoint.sh
+COPY ./gunicorn.sh /gunicorn.sh
 
 RUN sed -i 's/\r//' /entrypoint.sh \
     && sed -i 's/\r//' /gunicorn.sh \
