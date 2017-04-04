@@ -24,7 +24,7 @@ def queue_task1(param1):
         try:
             from .celery import task1
             task1.delay(param1)
-        except Exception as e
+        except Exception as e:
             logger.error('Celery Error {}'.format(e))
 
 
