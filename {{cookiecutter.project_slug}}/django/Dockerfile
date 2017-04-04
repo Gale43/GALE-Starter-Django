@@ -13,9 +13,13 @@ COPY . /app
 RUN chown -R django /app
 
 COPY ./entrypoint.sh /entrypoint.sh
+
 RUN sed -i 's/\r//' /entrypoint.sh \
+    && sed -i 's/\r//' /gunicorn.sh \
     && chmod +x /entrypoint.sh \
-    && chown django /entrypoint.sh
+    && chown django /entrypoint.sh \
+    && chmod +x /gunicorn.sh \
+    && chown django /gunicorn.sh
 
 WORKDIR /app
 EXPOSE 5000

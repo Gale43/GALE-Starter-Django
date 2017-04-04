@@ -10,6 +10,11 @@ if [ -z "$DATABASE_URL" ]; then
     export DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
 fi
 
+{% if cookiecutter.use_tasks == 'y' %}
+export CELERY_BROKER_URL=$REDIS_URL/0
+{% endif %}
+
+
 function postgres_ready(){
 python << END
 import sys
@@ -28,18 +33,4 @@ until postgres_ready; do
 done
 
 >&2 echo "Postgres is up - continuing..."
-
-#
-# uncomment depending on your project
-#
-# python /app/manage.py collectstatic --noinput
-# python /app/manage.py migrate --noinput
-
-if [ -z "$DJANGO_DEBUG" ] && [ "$DJANGO_DEBUG" == "true" ]; then
-    /usr/local/bin/gunicorn config.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app --reload
-else
-    /usr/local/bin/gunicorn config.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app
-fi
-
-# Useful for debugging
-# exec $cmd
+exec $cmd
