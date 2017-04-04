@@ -22,7 +22,7 @@ def queue_task1(param1):
             logger.warn('Failed to submit SQS message: task1')
     else:
         try:
-            .celery import task1
+            from .celery import task1
             task1.delay(param1)
         except Exception as e
             logger.error('Celery Error {}'.format(e))
