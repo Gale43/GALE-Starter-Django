@@ -6,7 +6,7 @@ from celery import Celery
 from django.apps import apps, AppConfig
 from django.conf import settings
 
-from . import task1
+from .task1 import run_task1
 
 if not settings.configured:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')  # pragma: no cover
@@ -28,12 +28,12 @@ class CeleryConfig(AppConfig):
 
 
 @app.task(bind=True)
-def debug_task(self):
+def task1(self):
     print('Request: {0!r}'.format(self.request))  # pragma: no cover
-    task1(self.request)
+    run_task1(self.request)
 
 
 {% else %}
 # Use this as a starting point for your project with celery.
 # If you are not using celery, you can remove this app
-{% endif -%}
+{% endif %}

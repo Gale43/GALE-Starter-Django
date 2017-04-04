@@ -200,6 +200,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 {% if cookiecutter.use_tasks == 'y' %}
+QUEUE_TYPE = env('QUEUE_TYPE', default='celery') # or 'sqs' for ElasticBeanstalk
 ########## CELERY
 INSTALLED_APPS += ['apps.tasks.celery.CeleryConfig']
 BROKER_URL = env('CELERY_BROKER_URL', default='django://')
@@ -207,7 +208,12 @@ if BROKER_URL == 'django://':
     CELERY_RESULT_BACKEND = 'redis://'
 else:
     CELERY_RESULT_BACKEND = BROKER_URL
+
 ########## END CELERY
+########## SQS
+SQS_REGION = env('SQS_REGION', default='us-west-2')
+SQS_QUEUE_NAME = env('SQS_QUEUE_NAME', default='{{ cookiecutter.project_slug }}')
+########## END SQS
 {% endif %}
 
 # CACHE CONFIGURATION
