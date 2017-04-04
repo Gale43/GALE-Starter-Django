@@ -214,7 +214,7 @@ else:
 # ------------------------------------------------------------------------------
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCach',
+        'BACKEND': 'django_redis.cache.RedisCache',
         'KEY_PREFIX': '{{ cookiecutter.project_slug }}',
         'LOCATION': env('DJANGO_CACHE_LOCATION', default='redis://redis:6379/1'),
         "OPTIONS": {
