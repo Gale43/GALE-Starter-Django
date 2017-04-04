@@ -42,5 +42,5 @@ services:
     depends_on:
      - postgres
      - redis
-    command: celery -A {{cookiecutter.project_slug}}.apps.tasks worker -l INFO
+    command: celery -A django.apps.tasks worker -l INFO
 {% endif %}
