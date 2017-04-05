@@ -29,7 +29,7 @@ def submit_to_sqs(json_payload):
                     logger('Error sending message to queue.', subject='SQS Error',
                            data=json_payload, data_title='SQS Payload')
                     return False
-            except Exception, exc:
+            except Exception as exc:
                 logger('Exception sending message to queue.', subject='SQS Error',
                        data=json_payload, data_title='SQS Payload', exc=exc)
                 return False
