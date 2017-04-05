@@ -5,6 +5,8 @@ import logging
 
 from django.conf import settings
 
+from .utils import submit_to_sqs
+
 logger = logging.getLogger(__name__)
 
 def run_task1(request):
