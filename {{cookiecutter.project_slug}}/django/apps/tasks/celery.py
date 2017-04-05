@@ -27,10 +27,9 @@ class CeleryConfig(AppConfig):
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
 
-@app.task(bind=True)
-def task1(self):
-    print('Request: {0!r}'.format(self.request))  # pragma: no cover
-    run_task1(self.request)
+@app.task()
+def task1(param1):
+    run_task1(param1)
 
 
 {% else %}

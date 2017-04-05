@@ -203,7 +203,7 @@ AUTHENTICATION_BACKENDS = [
 QUEUE_TYPE = env('QUEUE_TYPE', default='celery') # or 'sqs' for ElasticBeanstalk
 ########## CELERY
 INSTALLED_APPS += ['apps.tasks.celery.CeleryConfig']
-BROKER_URL = env('CELERY_BROKER_URL', default='django://')
+BROKER_URL = env('CELERY_BROKER_URL', default='redis://redis:6379')
 if BROKER_URL == 'django://':
     CELERY_RESULT_BACKEND = 'redis://'
 else:
