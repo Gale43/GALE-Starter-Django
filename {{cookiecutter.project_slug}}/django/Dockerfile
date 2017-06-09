@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
 
@@ -13,14 +13,10 @@ COPY . /app
 RUN chown -R django /app
 
 COPY ./entrypoint.sh /entrypoint.sh
-COPY ./gunicorn.sh /gunicorn.sh
 
 RUN sed -i 's/\r//' /entrypoint.sh \
-    && sed -i 's/\r//' /gunicorn.sh \
     && chmod +x /entrypoint.sh \
-    && chown django /entrypoint.sh \
-    && chmod +x /gunicorn.sh \
-    && chown django /gunicorn.sh
+    && chown django /entrypoint.sh
 
 WORKDIR /app
 EXPOSE 5000

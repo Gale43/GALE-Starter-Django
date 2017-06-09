@@ -3,6 +3,10 @@ version: '2'
 volumes:
   postgres_data: {}
   postgres_backup: {}
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
 
 services:
   postgres:
@@ -23,9 +27,45 @@ services:
     env_file: .env
     ports:
       - "5000:5000"
-    command: /gunicorn.sh
 
+  elasticsearch1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.2
+    container_name: elasticsearch1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
 
+  elasticsearch2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch1"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - esdata2:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.3.2
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch1:9200
+    ports:
+      - 5601:5601
 
   nginx:
     build: ./nginx
