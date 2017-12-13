@@ -6,7 +6,10 @@
 # in addition to calling all the tasks from this entry point,
 # you need to create and plug an SQS queue to the EB environment
 #
+import logging
+import json
 
+from django.conf import settings
 from django.http import HttpResponse, Http404
 
 from rest_framework.decorators import api_view
@@ -42,6 +45,7 @@ def index(request):
         return HttpResponse("KO")
 
     return HttpResponse("OK")
+
 
 {% else %}
 # Use this as a starting point for your project with celery/tasks.
