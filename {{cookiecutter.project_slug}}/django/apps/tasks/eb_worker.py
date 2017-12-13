@@ -9,22 +9,39 @@
 
 from django.http import HttpResponse, Http404
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from . import task1
 
-def index(payload):
+@api_view(['POST'])
+def index(request):
     # if the queue type isn't SQS we fail
     if settings.QUEUE_TYPE != 'sqs':
         return Http404("Host configuration does not authorize this endpoint.")
 
+    try:
+        body = request.body.decode('utf-8')
+        payload = json.loads(body)
 
-    # switch on the payload action_type, verify payload, extract parameters
-    # and call the tasks
+        action = payload.get('action')
 
-    # this sample is calling a single task
-    task1(payload.param1)
+        param1 = payload.get('param1', None)
+
+        # add reading all the parameters for all tasks here
+
+        if action == 'task1':
+            task1(param1)
+
+        # one "elif action == 'bla':" per task
+
+        else:
+            return Http404("Payload action does not exist.")
+
+    except Exception as e:
+        return HttpResponse("KO")
 
     return HttpResponse("OK")
-
 
 {% else %}
 # Use this as a starting point for your project with celery/tasks.

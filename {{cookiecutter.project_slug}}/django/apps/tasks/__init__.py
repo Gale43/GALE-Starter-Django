@@ -1,7 +1,7 @@
 {% if cookiecutter.use_tasks == 'y' %}
 # -*- coding: utf-8 -*-
 
-from .task1 import queue_task1
+from .task1 import queue_task1, run_task1
 
 {% else %}
 # Use this as a starting point for your project with celery/tasks.
