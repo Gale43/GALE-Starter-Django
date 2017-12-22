@@ -8,6 +8,7 @@
 #
 import logging
 import json
+import inspect
 
 from django.conf import settings
 from django.http import HttpResponse, Http404
@@ -15,11 +16,38 @@ from django.http import HttpResponse, Http404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from . import task1
+import apps
+from . import QueueableTask
+
+'''
+    a sample task is in the apps.api folder
+    we put it there, just to show that the tasks can be anywhere
+    (but it doesn't really make sense for tasks to be in the api folder)
+
+'''
+
+def get_queueable_tasks():
+    tasks = {}
+    # inspect modules from the apps module
+    for name, obj in inspect.getmembers(apps):
+        if inspect.ismodule(obj):
+            # keep only the QueueableTask sub-classes
+            for class_name, c in inspect.getmembers(obj):
+                # print("{} >>> {}".format(class_name, c))
+                if inspect.isclass(c) and issubclass(c, QueueableTask):
+                    try:
+                        action = c().action_name()
+                        print('task found: {} >>> {}'.format(class_name, c))
+                        tasks[action] = c
+                    except AttributeError:
+                        # we ignore classes that don't have the action_name()
+                        # mostly done for the LoyaltyClass itself
+                        pass
+    return tasks
+
 
 @api_view(['POST'])
 def index(request):
-    # if the queue type isn't SQS we fail
     if settings.QUEUE_TYPE != 'sqs':
         return Http404("Host configuration does not authorize this endpoint.")
 
@@ -28,16 +56,14 @@ def index(request):
         payload = json.loads(body)
 
         action = payload.get('action')
+        tasks = get_queueable_tasks()
 
-        param1 = payload.get('param1', None)
-
-        # add reading all the parameters for all tasks here
-
-        if action == 'task1':
-            task1(param1)
-
-        # one "elif action == 'bla':" per task
-
+        # call the run
+        try:
+            task = tasks[action]()
+            task.decode_args_and_run(payload)
+        except KeyError:
+            return Http404("Payload action does not exist.")
         else:
             return Http404("Payload action does not exist.")
 
@@ -45,9 +71,6 @@ def index(request):
         return HttpResponse("KO")
 
     return HttpResponse("OK")
-
-
 {% else %}
-# Use this as a starting point for your project with celery/tasks.
 # If you are not using celery/tasks, you can remove this app
 {% endif %}

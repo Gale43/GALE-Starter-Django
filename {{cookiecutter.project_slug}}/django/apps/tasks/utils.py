@@ -45,6 +45,5 @@ def submit_to_sqs(json_payload):
 
 
 {% else %}
-# Use this as a starting point for your project with celery/tasks.
 # If you are not using celery/tasks, you can remove this app
 {% endif %}

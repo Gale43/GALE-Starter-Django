@@ -1,12 +1,12 @@
 {% if cookiecutter.use_tasks == 'y' %}
 # -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import os
 from celery import Celery
 from django.apps import apps, AppConfig
 from django.conf import settings
-
-from .task1 import run_task1
 
 if not settings.configured:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')  # pragma: no cover
@@ -26,13 +26,14 @@ class CeleryConfig(AppConfig):
         installed_apps = [app_config.name for app_config in apps.get_app_configs()]
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
+'''
+    a sample task is in the apps.api folder
+    we put it there, just to show that the tasks can be anywhere
+    (but it doesn't really make sense for tasks to be in the api folder)
 
-@app.task()
-def task1(param1):
-    run_task1(param1)
+'''
 
 
 {% else %}
-# Use this as a starting point for your project with celery.
 # If you are not using celery, you can remove this app
 {% endif %}
