@@ -1,0 +1,60 @@
+#!groovy
+@Library('gale43-library') _
+
+/**
+* The _ here is intentional. Java/Groovy Annotations such as @Library must be applied to an element.
+* That is often a using statement, but that isnâ€™t needed here so by convention we use an _.
+*/
+
+
+pipeline {
+  agent {
+    node {
+      label 'master'
+    }
+  }
+
+  stages {
+  stage('SonarQube Analysis') {
+      steps {
+        timeout(unit: 'MINUTES', time: 1) {
+          withCredentials([[$class: 'StringBinding', credentialsId: 'github_oath_token', variable: 'GITHUB_ACCESS_TOKEN']]) {
+            script {
+              withSonarQubeEnv('SonarQube Server') {
+                def scannerHome = tool 'SonarQube Scanner'
+                if(env.CHANGE_ID) {
+                  sh "${scannerHome}/bin/sonar-scanner " +
+                    "-Dsonar.analysis.mode=preview " +
+                    "-Dsonar.github.pullRequest=${env.CHANGE_ID} " +
+                    "-Dsonar.github.oauth=${GITHUB_ACCESS_TOKEN} "
+                } else {
+                  sh "${scannerHome}/bin/sonar-scanner"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      echo 'One way or another, I have finished'
+      deleteDir() /* clean up our workspace */
+    }
+
+    success {
+      addCommentToPullRequest('SonarQube analysis ran successfully.', "${env.CHANGE_ID}", "Gale43/GALE-Starter-Django")
+    }
+
+    failure {
+      addCommentToPullRequest('SonarQube analysis ran unsuccessfully', "${env.CHANGE_ID}", "Gale43/GALE-Starter-Django")
+    }
+
+    changed {
+      echo 'Things were different before...'
+    }
+  }
+}
+EOF
